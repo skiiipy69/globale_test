@@ -79,7 +79,7 @@ choices = user_choices.split(',')
 option_id_map = {
     "1": "49-selectable",
     "2": "50-selectable",
-    "3": "1575-selectable",
+    "3": "1574-selectable",
 }
 for choice in choices:
     option_id = option_id_map.get(choice.strip())
@@ -188,7 +188,31 @@ if nb_result > 100:
             break
 
 # Save the final DataFrame to an Excel file
-final_df.to_excel("global_data.xlsx", index=False)
+final_df.to_excel("url_data.xlsx", index=False)
 
 # Close the browser window
 driver.quit()
+def extract_submission_links(input_file, output_file):
+    submission_links = []
+
+    # Read the Excel file
+    df = pd.read_excel(input_file, header=None)
+
+    # Iterate over each cell in the dataframe
+    for index, row in df.iterrows():
+        for cell in row:
+            # Extract submission links from the current cell
+            links = re.findall(r'https?://www\.marchespublics\.gov\.ma/index\.php\?page=entreprise\.SuiviConsultation&refConsultation=\d+&orgAcronyme=\w+', str(cell))
+            submission_links.extend(links)
+
+    # Writing the extracted submission links to a .txt file
+    with open(output_file, 'w') as txtfile:
+        for link in submission_links:
+            txtfile.write(link + '\n')
+
+    print("Submission links extracted and saved to", output_file)
+
+# Example usage:
+input_file = "url_data.xlsx"
+output_file = "submission_links.txt"
+extract_submission_links(input_file, output_file)
