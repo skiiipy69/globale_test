@@ -80,10 +80,7 @@ option_id_map = {
     "1": "49-selectable",
     "2": "50-selectable",
     "3": "1575-selectable",
-    # Add mappings for other options as needed...
 }
-
-# Click on each selected option
 for choice in choices:
     option_id = option_id_map.get(choice.strip())
     if option_id:
@@ -121,7 +118,7 @@ option_500.click()
 # Wait for the page to load after selecting the option
 time.sleep(2)  # Adjust wait time as needed
 # Define nb_result_element after the search results page loads
-nb_result_element = WebDriverWait(driver, 10).until(
+nb_result_element = WebDriverWait(driver, 3).until(
     EC.presence_of_element_located((By.ID, "NB_RESULT"))
 )
 
@@ -156,7 +153,8 @@ if nb_result > 100:
                 deadline = cells[5].text.strip()
                 download_link = cells[7].find('a', class_='downoaldcpsicone')['href'] if cells[7].find('a', class_='downoaldcpsicone') else ''
                 submission_link = cells[7].find('a', class_='btn mini btn-info')['href'] if cells[7].find('a', class_='btn mini btn-info') else ''
-
+            if submission_link:
+                submission_link = submission_link.replace("EntrepriseDetailsConsultation", "SuiviConsultation")
                 # Append data to the list only if num_ref is not empty
                 data.append({
                     'Num Ref': num_ref,
@@ -190,7 +188,7 @@ if nb_result > 100:
             break
 
 # Save the final DataFrame to an Excel file
-final_df.to_excel("url_data.xlsx", index=False)
+final_df.to_excel("global_data.xlsx", index=False)
 
 # Close the browser window
 driver.quit()
