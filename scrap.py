@@ -110,7 +110,7 @@ chosen_single_element = WebDriverWait(driver, 10).until(
 chosen_single_element.click()
 
 # Find and click the option with the value "500"
-option_500 = WebDriverWait(driver, 10).until(
+option_500 = WebDriverWait(driver, 1).until(
     EC.element_to_be_clickable((By.XPATH, "//li[@class='active-result' and text()='500']"))
 )
 option_500.click()
